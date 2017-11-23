@@ -1,32 +1,17 @@
-use std::str;
+mod object;
+mod parser;
+mod eval;
 
-struct Message {
-    name: String,
-    arguments: Vec<(String, Expression)>,
-}
+use parser::{tokenize, parse_program};
+use eval::Program;
 
-struct Expression {
-    target: String,
-    messages: Vec<Message>,
-}
-
-enum Token {
-    Identifier(String),
-    Number(String),
-    ParamName(String),
-    Semicolon,
-    Then,
-}
-
-fn tokenize(code: String) -> Vec<Token> {
-    let chars = code.chars().into_iter().peekable();
-    while let Some(c) = chars.next() {}
-}
-
-fn get_long_token(prev: char, chars: Chars) -> Token {}
+use std::io::{self, Read};
 
 fn main() {
-    let it = "hello world".to_string();
-    let mut chars = it.chars().into_iter().peekable();
-    println!("Tokens: {:?}", chars.peek());
+    let mut program = String::new();
+    io::stdin().read_to_string(&mut program).unwrap();
+    let tokens = tokenize(program);
+    let parsed = parse_program(tokens);
+    // println!("{:#?}", parsed);
+    Program::new().eval(parsed);
 }
